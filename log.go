@@ -8,6 +8,8 @@ import (
 	"github.com/rolandhe/daog"
 )
 
+var OnlyErrorLogger = &onlyErrorDaogLogger{}
+
 func init() {
 	daog.GLogger = &daogLogger{}
 }
@@ -32,6 +34,26 @@ func (dl *daogLogger) ExecSQLAfter(ctx context.Context, sqlMd5 string, cost int6
 }
 
 func (dl *daogLogger) SimpleLogError(err error) {
+	dglogger.Errorf(&dgctx.DgContext{TraceId: uuid.NewString()}, "[daog] err: %v", err)
+}
+
+type onlyErrorDaogLogger struct {
+}
+
+func (dl *onlyErrorDaogLogger) Error(ctx context.Context, err error) {
+	dglogger.Errorf(getDgContext(ctx), "[daog] err: %v", err)
+}
+
+func (dl *onlyErrorDaogLogger) Info(ctx context.Context, content string) {
+}
+
+func (dl *onlyErrorDaogLogger) ExecSQLBefore(ctx context.Context, sql string, argsJson []byte, sqlMd5 string) {
+}
+
+func (dl *onlyErrorDaogLogger) ExecSQLAfter(ctx context.Context, sqlMd5 string, cost int64) {
+}
+
+func (dl *onlyErrorDaogLogger) SimpleLogError(err error) {
 	dglogger.Errorf(&dgctx.DgContext{TraceId: uuid.NewString()}, "[daog] err: %v", err)
 }
 

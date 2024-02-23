@@ -8,7 +8,7 @@ import (
 
 var dataSource daog.Datasource
 
-func InitDatasource(ds daog.Datasource) {
+func SetDatasource(ds daog.Datasource) {
 	dataSource = ds
 }
 
