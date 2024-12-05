@@ -4,7 +4,6 @@ import (
 	"context"
 	dgctx "github.com/darwinOrg/go-common/context"
 	dglogger "github.com/darwinOrg/go-logger"
-	"github.com/google/uuid"
 	"github.com/rolandhe/daog"
 )
 
@@ -34,7 +33,7 @@ func (dl *daogLogger) ExecSQLAfter(ctx context.Context, sqlMd5 string, cost int6
 }
 
 func (dl *daogLogger) SimpleLogError(err error) {
-	dglogger.Errorf(&dgctx.DgContext{TraceId: uuid.NewString()}, "[daog] err: %v", err)
+	dglogger.Errorf(dgctx.SimpleDgContext(), "[daog] err: %v", err)
 }
 
 type onlyErrorDaogLogger struct {
@@ -54,7 +53,7 @@ func (dl *onlyErrorDaogLogger) ExecSQLAfter(ctx context.Context, sqlMd5 string, 
 }
 
 func (dl *onlyErrorDaogLogger) SimpleLogError(err error) {
-	dglogger.Errorf(&dgctx.DgContext{TraceId: uuid.NewString()}, "[daog] err: %v", err)
+	dglogger.Errorf(dgctx.SimpleDgContext(), "[daog] err: %v", err)
 }
 
 func getDgContext(ctx context.Context) *dgctx.DgContext {
