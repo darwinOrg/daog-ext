@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/darwinOrg/go-common v0.1.72
 	github.com/darwinOrg/go-logger v0.0.9
-	github.com/rolandhe/daog v0.0.39
+	github.com/rolandhe/daog v0.0.40
 )
 
 require (
@@ -14,5 +14,5 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/natefinch/lumberjack v2.0.0+incompatible // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
-	golang.org/x/sys v0.28.0 // indirect
+	golang.org/x/sys v0.29.0 // indirect
 )
