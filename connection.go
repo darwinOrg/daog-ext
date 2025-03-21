@@ -32,6 +32,17 @@ type DbCfg struct {
 	NotLogSQL bool `json:"not-log-sql" mapstructure:"not-log-sql"`
 }
 
+func InitDbWithPossessionCallback(cfg *DbCfg) {
+	InitDb(cfg)
+
+	daog.ChangeFieldOfInsBeforeWrite = func(valueMap map[string]any, extractor daog.FieldPointExtractor) error {
+		return daog.ChangeInt64ByFieldNameCallback(valueMap, "op_id", extractor)
+	}
+	daog.AddNewModifyFieldBeforeUpdate = func(valueMap map[string]any, modifier daog.Modifier, existField func(filedName string) bool) error {
+		return daog.ChangeModifierByFieldNameCallback(valueMap, "op_id", modifier, existField)
+	}
+}
+
 func InitDb(cfg *DbCfg) {
 	dbConf := &daog.DbConf{
 		DbUrl:    cfg.Url,
