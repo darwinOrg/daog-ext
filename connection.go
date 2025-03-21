@@ -2,6 +2,7 @@ package daogext
 
 import (
 	dgsys "github.com/darwinOrg/go-common/sys"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/rolandhe/daog"
 	"log"
 )
