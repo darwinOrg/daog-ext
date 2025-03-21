@@ -6,12 +6,6 @@ import (
 	txrequest "github.com/rolandhe/daog/tx"
 )
 
-var dataSource daog.Datasource
-
-func SetDatasource(ds daog.Datasource) {
-	dataSource = ds
-}
-
 func Readonly(ctx *dgctx.DgContext, workFn func(tc *daog.TransContext) error) error {
 	return daog.AutoTrans(func() (*daog.TransContext, error) {
 		return newReadonlyTransContext(ctx)

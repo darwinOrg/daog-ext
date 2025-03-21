@@ -1,9 +1,9 @@
 module github.com/darwinOrg/daog-ext
 
-go 1.19
+go 1.23.1
 
 require (
-	github.com/darwinOrg/go-common v0.1.72
+	github.com/darwinOrg/go-common v0.1.81
 	github.com/darwinOrg/go-logger v0.0.9
 	github.com/rolandhe/daog v0.0.40
 )
@@ -14,5 +14,5 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/natefinch/lumberjack v2.0.0+incompatible // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
-	golang.org/x/sys v0.29.0 // indirect
+	golang.org/x/sys v0.31.0 // indirect
 )
