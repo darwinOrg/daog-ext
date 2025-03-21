@@ -1,11 +1,19 @@
 package daogext
 
-import "github.com/rolandhe/daog"
+import (
+	dgsys "github.com/darwinOrg/go-common/sys"
+	"github.com/rolandhe/daog"
+	"log"
+)
 
 var dataSource daog.Datasource
 
 func SetDatasource(ds daog.Datasource) {
 	dataSource = ds
+}
+
+func GetDatasource() daog.Datasource {
+	return dataSource
 }
 
 // DbCfg 数据源配置, 包括数据库url和连接池相关配置
@@ -20,20 +28,26 @@ type DbCfg struct {
 	MaxLifeTime int `json:"max-life-time" mapstructure:"max-life-time"`
 	// 最大空闲时间，单位是秒
 	MaxIdleTime int `json:"max-idle-time" mapstructure:"max-idle-time"`
+	// 不打印SQL日志
+	NotLogSQL bool `json:"not-log-sql" mapstructure:"not-log-sql"`
 }
 
-func InitDb(dc *DbCfg) {
+func InitDb(cfg *DbCfg) {
 	dbConf := &daog.DbConf{
-		DbUrl:    dc.Url,
-		Size:     dc.MaxOpenConns,
-		Life:     dc.MaxLifeTime,
-		IdleCons: dc.MaxIdleConns,
-		IdleTime: dc.MaxIdleTime,
-		LogSQL:   true,
+		DbUrl:    cfg.Url,
+		Size:     cfg.MaxOpenConns,
+		Life:     cfg.MaxLifeTime,
+		IdleCons: cfg.MaxIdleConns,
+		IdleTime: cfg.MaxIdleTime,
+		LogSQL:   !cfg.NotLogSQL,
 	}
 	var err error
 	dataSource, err = daog.NewDatasource(dbConf)
 	if err != nil {
-		panic(err)
+		if dgsys.IsFormalProfile() {
+			panic(err)
+		} else {
+			log.Printf("init db error: %v", err)
+		}
 	}
 }
