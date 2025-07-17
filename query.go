@@ -14,8 +14,8 @@ func CountRaw(ctx *dgctx.DgContext, sql string, args ...any) (int64, error) {
 }
 
 func CountRawByTc(ctx *dgctx.DgContext, tc *daog.TransContext, sql string, args ...any) (int64, error) {
-	scs, err := daog.QueryRawSQL(tc, func(ins *SimpleCount) []any {
-		return []any{&ins.Cnt}
+	scs, err := daog.QueryRawSQL(tc, func(ins *int64) []any {
+		return []any{ins}
 	}, sql, args...)
 	if err != nil {
 		dglogger.Errorf(ctx, "daog.QueryRawSQL error: %v", err)
@@ -25,5 +25,5 @@ func CountRawByTc(ctx *dgctx.DgContext, tc *daog.TransContext, sql string, args 
 		return 0, nil
 	}
 
-	return scs[0].Cnt, nil
+	return *scs[0], nil
 }
