@@ -2,12 +2,13 @@ package daogext
 
 import (
 	"context"
+	"fmt"
+
+	alarmsdk "e.globalpand.cn/libs/alarm-sdk"
 	dgctx "github.com/darwinOrg/go-common/context"
 	dglogger "github.com/darwinOrg/go-logger"
 	"github.com/rolandhe/daog"
 )
-
-var OnlyErrorLogger = &onlyErrorDaogLogger{}
 
 func init() {
 	daog.GLogger = &daogLogger{}
@@ -17,7 +18,7 @@ type daogLogger struct {
 }
 
 func (dl *daogLogger) Error(ctx context.Context, err error) {
-	dglogger.Errorf(getDgContext(ctx), "[daog] err: %v", err)
+	alarmDatabaseError(dgctx.SimpleDgContext(), err)
 }
 
 func (dl *daogLogger) Info(ctx context.Context, content string) {
@@ -33,14 +34,16 @@ func (dl *daogLogger) ExecSQLAfter(ctx context.Context, sqlMd5 string, cost int6
 }
 
 func (dl *daogLogger) SimpleLogError(err error) {
-	dglogger.Errorf(dgctx.SimpleDgContext(), "[daog] err: %v", err)
+	alarmDatabaseError(dgctx.SimpleDgContext(), err)
 }
+
+var OnlyErrorLogger = &onlyErrorDaogLogger{}
 
 type onlyErrorDaogLogger struct {
 }
 
 func (dl *onlyErrorDaogLogger) Error(ctx context.Context, err error) {
-	dglogger.Errorf(getDgContext(ctx), "[daog] err: %v", err)
+	alarmDatabaseError(getDgContext(ctx), err)
 }
 
 func (dl *onlyErrorDaogLogger) Info(ctx context.Context, content string) {
@@ -53,9 +56,13 @@ func (dl *onlyErrorDaogLogger) ExecSQLAfter(ctx context.Context, sqlMd5 string, 
 }
 
 func (dl *onlyErrorDaogLogger) SimpleLogError(err error) {
-	dglogger.Errorf(dgctx.SimpleDgContext(), "[daog] err: %v", err)
+	alarmDatabaseError(dgctx.SimpleDgContext(), err)
 }
 
 func getDgContext(ctx context.Context) *dgctx.DgContext {
 	return &dgctx.DgContext{TraceId: daog.GetTraceIdFromContext(ctx), GoId: daog.GetGoroutineIdFromContext(ctx)}
+}
+
+func alarmDatabaseError(ctx *dgctx.DgContext, err error) {
+	alarmsdk.EmergencyAlarm(ctx, fmt.Sprintf("database execution error: %v", err))
 }

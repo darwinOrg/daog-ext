@@ -1,10 +1,11 @@
 package daogext
 
 import (
+	"log"
+
 	dgsys "github.com/darwinOrg/go-common/sys"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/rolandhe/daog"
-	"log"
 )
 
 var dataSource daog.Datasource
