@@ -64,5 +64,5 @@ func getDgContext(ctx context.Context) *dgctx.DgContext {
 }
 
 func alarmDatabaseError(ctx *dgctx.DgContext, err error) {
-	alarmsdk.EmergencyAlarm(ctx, fmt.Sprintf("database execution error: %v", err))
+	alarmsdk.BackendAlarm(ctx, fmt.Sprintf("database execution error: %v", err))
 }
