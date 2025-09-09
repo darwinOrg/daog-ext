@@ -64,13 +64,13 @@ func getDgContext(ctx context.Context) *dgctx.DgContext {
 }
 
 func alarmDatabaseError(ctx *dgctx.DgContext, err error) {
-	if !enableErrorAlarm {
-		return
-	}
-
-	if serviceName != "" {
-		alarmsdk.BackendAlarm(ctx, fmt.Sprintf("[%s] database execution error: %v", serviceName, err))
+	if enableErrorAlarm {
+		if serviceName != "" {
+			alarmsdk.BackendAlarm(ctx, fmt.Sprintf("[%s] database execution error: %v", serviceName, err))
+		} else {
+			alarmsdk.BackendAlarm(ctx, fmt.Sprintf("database execution error: %v", err))
+		}
 	} else {
-		alarmsdk.BackendAlarm(ctx, fmt.Sprintf("database execution error: %v", err))
+		dglogger.Errorf(ctx, "[daog] err: %v", err)
 	}
 }
