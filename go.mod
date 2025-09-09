@@ -16,7 +16,7 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/darwinOrg/go-dingtalk v0.0.3 // indirect
 	github.com/darwinOrg/go-feishu v0.0.1 // indirect
-	github.com/darwinOrg/go-httpclient v0.1.59 // indirect
+	github.com/darwinOrg/go-httpclient v0.1.60 // indirect
 	github.com/darwinOrg/go-monitor v0.0.11 // indirect
 	github.com/go-lark/lark v1.16.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect

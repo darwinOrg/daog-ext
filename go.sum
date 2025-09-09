@@ -14,8 +14,8 @@ github.com/darwinOrg/go-dingtalk v0.0.3 h1:5kJ3cQR4+wFNgMdyKeB6PzMmjxaiu0BLM/hkH
 github.com/darwinOrg/go-dingtalk v0.0.3/go.mod h1:5IET9ut1nZLcF+5zW7gHCuadvI5gmcvLCAK/lARtnYQ=
 github.com/darwinOrg/go-feishu v0.0.1 h1:4ImT5RNgMNxYzye/ltkQU36BknirsEwXzvf3ufP5nYU=
 github.com/darwinOrg/go-feishu v0.0.1/go.mod h1:MEwwwXFZQuKEton/0hhMi2zBLu6AeQdDJwzztT0oXLY=
-github.com/darwinOrg/go-httpclient v0.1.59 h1:1oR21ahAk+xnlg+lkQqh7X6ln6J+3cQmhOnnbX/L6wA=
-github.com/darwinOrg/go-httpclient v0.1.59/go.mod h1:ukYX86kplNfs3R8h+xlPXgjduFL7NwI8UZ19nKRveIk=
+github.com/darwinOrg/go-httpclient v0.1.60 h1:Nvg8PeLGbkueTImUm4DvBgsL6ytuk6oQs2vhIVIXs6k=
+github.com/darwinOrg/go-httpclient v0.1.60/go.mod h1:B/4EZDowZLZQgRRZ6imiBFOqVA6D79UIwThacf5KjiY=
 github.com/darwinOrg/go-logger v0.0.15 h1:zPrIt2gPyIhgQ4FwiBB0wl7V5+rJCqsavWRHzpUsN7Y=
 github.com/darwinOrg/go-logger v0.0.15/go.mod h1:oiySTEPqKFmU7QrukvoPymjHH6eUfq4K5M1nom66vHY=
 github.com/darwinOrg/go-monitor v0.0.11 h1:erSYwqOQMI5kEeYKoaG33BvXH6pyc1k0gW+EDO05FEk=
