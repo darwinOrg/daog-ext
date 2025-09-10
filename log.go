@@ -18,7 +18,7 @@ type daogLogger struct {
 }
 
 func (dl *daogLogger) Error(ctx context.Context, err error) {
-	alarmDatabaseError(dgctx.SimpleDgContext(), err)
+	alarmDatabaseError(getDgContext(ctx), err)
 }
 
 func (dl *daogLogger) Info(ctx context.Context, content string) {
