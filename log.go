@@ -3,10 +3,10 @@ package daogext
 import (
 	"context"
 	"fmt"
-	"runtime"
 
 	alarmsdk "e.globalpand.cn/libs/alarm-sdk"
 	dgctx "github.com/darwinOrg/go-common/context"
+	"github.com/darwinOrg/go-common/utils"
 	dglogger "github.com/darwinOrg/go-logger"
 	"github.com/rolandhe/daog"
 )
@@ -65,10 +65,7 @@ func getDgContext(ctx context.Context) *dgctx.DgContext {
 }
 
 func alarmDatabaseError(ctx *dgctx.DgContext, err error) {
-	// 获取错误堆栈信息
-	buf := make([]byte, 1<<16)
-	n := runtime.Stack(buf, false)
-	stack := string(buf[:n])
+	stack := utils.GetRuntimeStack()
 
 	if enableErrorAlarm {
 		if serviceName != "" {

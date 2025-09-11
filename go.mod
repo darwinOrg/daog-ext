@@ -4,7 +4,7 @@ go 1.23.1
 
 require (
 	e.globalpand.cn/libs/alarm-sdk v0.0.11
-	github.com/darwinOrg/go-common v0.2.12
+	github.com/darwinOrg/go-common v0.2.13
 	github.com/darwinOrg/go-logger v0.0.15
 	github.com/go-sql-driver/mysql v1.9.3
 	github.com/rolandhe/daog v0.0.41
