@@ -3,6 +3,7 @@ package daogext
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	alarmsdk "e.globalpand.cn/libs/alarm-sdk"
 	dgctx "github.com/darwinOrg/go-common/context"
@@ -65,15 +66,14 @@ func getDgContext(ctx context.Context) *dgctx.DgContext {
 }
 
 func alarmDatabaseError(ctx *dgctx.DgContext, err error) {
-	stack := utils.GetRuntimeStack()
-
-	if enableErrorAlarm {
+	if enableErrorAlarm && strings.Contains(err.Error(), "ERROR") {
+		stack := utils.GetRuntimeStack()
 		if serviceName != "" {
-			alarmsdk.BackendAlarm(ctx, fmt.Sprintf("[%s] [daog] error: %v\nStack: %s", serviceName, err, stack))
+			alarmsdk.BackendAlarm(ctx, fmt.Sprintf("[%s] [daog] error: %v\nstack: %s", serviceName, err, stack))
 		} else {
-			alarmsdk.BackendAlarm(ctx, fmt.Sprintf("[daog] error: %v\nStack: %s", err, stack))
+			alarmsdk.BackendAlarm(ctx, fmt.Sprintf("[daog] error: %v\nstack: %s", err, stack))
 		}
 	} else {
-		dglogger.Errorf(ctx, "[daog] err: %v\nStack: %s", err, stack)
+		dglogger.Errorf(ctx, "[daog] err: %v", err)
 	}
 }
