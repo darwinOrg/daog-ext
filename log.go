@@ -68,11 +68,7 @@ func getDgContext(ctx context.Context) *dgctx.DgContext {
 func alarmDatabaseError(ctx *dgctx.DgContext, err error) {
 	if enableErrorAlarm && strings.Contains(err.Error(), "ERROR") {
 		stack := utils.GetRuntimeStack()
-		if serviceName != "" {
-			alarmsdk.BackendAlarm(ctx, fmt.Sprintf("[%s] [daog] error: %v\nstack: %s", serviceName, err, stack))
-		} else {
-			alarmsdk.BackendAlarm(ctx, fmt.Sprintf("[daog] error: %v\nstack: %s", err, stack))
-		}
+		alarmsdk.BackendAlarm(ctx, fmt.Sprintf("[daog] error: %v\nstack: %s", err, stack))
 	} else {
 		dglogger.Errorf(ctx, "[daog] err: %v", err)
 	}

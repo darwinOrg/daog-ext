@@ -10,7 +10,6 @@ import (
 
 var (
 	dataSource       daog.Datasource
-	serviceName      string
 	enableErrorAlarm bool
 )
 
@@ -38,8 +37,8 @@ type DbCfg struct {
 	NotLogSQL bool `json:"not-log-sql" mapstructure:"not-log-sql"`
 }
 
-func InitDbWithPossessionCallback(appName string, cfg *DbCfg, enableAlarm bool) {
-	InitDb(appName, cfg, enableAlarm)
+func InitDbWithPossessionCallback(cfg *DbCfg, enableAlarm bool) {
+	InitDb(cfg, enableAlarm)
 
 	daog.ChangeFieldOfInsBeforeWrite = func(valueMap map[string]any, extractor daog.FieldPointExtractor) error {
 		return daog.ChangeInt64ByFieldNameCallback(valueMap, "op_id", extractor)
@@ -49,8 +48,7 @@ func InitDbWithPossessionCallback(appName string, cfg *DbCfg, enableAlarm bool) 
 	}
 }
 
-func InitDb(appName string, cfg *DbCfg, enableAlarm bool) {
-	serviceName = appName
+func InitDb(cfg *DbCfg, enableAlarm bool) {
 	enableErrorAlarm = enableAlarm
 	dbConf := &daog.DbConf{
 		DbUrl:    cfg.Url,
