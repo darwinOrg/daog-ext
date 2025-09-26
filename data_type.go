@@ -12,14 +12,26 @@ func isMySQLTypeCompatibleWithGo(mysqlType, goTypeName string) bool {
 
 	// 定义映射关系：Go 类型 -> 兼容的 MySQL 类型列表
 	compatible := map[string][]string{
-		"int": {
-			"tinyint", "smallint", "mediumint", "int", "integer",
+		"int8": {
+			"tinyint", "smallint", "mediumint",
 		},
-		"int64": {
-			"bigint",
+		"uint8": {
+			"tinyint unsigned", "smallint unsigned", "mediumint unsigned",
+		},
+		"int": {
+			"int", "integer",
 		},
 		"uint": {
 			"tinyint unsigned", "smallint unsigned", "mediumint unsigned", "int unsigned", "integer unsigned",
+		},
+		"int32": {
+			"int", "integer",
+		},
+		"uint32": {
+			"tinyint unsigned", "smallint unsigned", "mediumint unsigned", "int unsigned", "integer unsigned",
+		},
+		"int64": {
+			"bigint",
 		},
 		"uint64": {
 			"bigint unsigned",
@@ -50,6 +62,9 @@ func isMySQLTypeCompatibleWithGo(mysqlType, goTypeName string) bool {
 			"binary", "varbinary", "bit",
 		},
 		"time.time": {
+			"datetime", "timestamp", "date", "time", "year",
+		},
+		"ttypes.NilableDate": {
 			"datetime", "timestamp", "date", "time", "year",
 		},
 		"ttypes.NilableDatetime": {

@@ -37,8 +37,12 @@ func convertToMetaExt[T any](meta *daog.TableMeta[T]) *tableMetaExt {
 	var types []string
 	for _, column := range meta.Columns {
 		fieldObj := meta.LookupFieldFunc(column, obj, true)
-		fieldType := reflect.TypeOf(fieldObj).Name()
-		types = append(types, fieldType)
+		fieldType := reflect.TypeOf(fieldObj)
+		for fieldType.Kind() == reflect.Ptr {
+			fieldType = fieldType.Elem()
+		}
+		fieldTypeString := fieldType.String()
+		types = append(types, fieldTypeString)
 	}
 
 	return &tableMetaExt{
@@ -89,7 +93,12 @@ func validateTableMeta() {
 
 			// 如果实际数据库里面没有这个字段，则报警
 			if tableColumnInfo == nil {
-				alarmsdk.BackendAlarm(ctx, fmt.Sprintf("%s.%s字段缺失", tableName, metaColumn))
+				alarmContent := fmt.Sprintf("[%s.%s]字段缺失", tableName, metaColumn)
+				if enableErrorAlarm {
+					alarmsdk.BackendAlarm(ctx, alarmContent)
+				} else {
+					dglogger.Warn(ctx, alarmContent)
+				}
 				continue
 			}
 
@@ -98,7 +107,12 @@ func validateTableMeta() {
 
 			// 如果mysql与go的数据类型不匹配，则报警
 			if !isMySQLTypeCompatibleWithGo(dbColumnType, metaColumnType) {
-				alarmsdk.BackendAlarm(ctx, fmt.Sprintf("%s.%s字段类型不匹配: %s / %s", tableName, metaColumn, dbColumnType, metaColumnType))
+				alarmContent := fmt.Sprintf("[%s.%s]字段类型不匹配: %s / %s", tableName, metaColumn, dbColumnType, metaColumnType)
+				if enableErrorAlarm {
+					alarmsdk.BackendAlarm(ctx, alarmContent)
+				} else {
+					dglogger.Warn(ctx, alarmContent)
+				}
 				continue
 			}
 		}
