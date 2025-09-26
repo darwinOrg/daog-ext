@@ -1,5 +1,5 @@
-e.globalpand.cn/libs/alarm-sdk v0.0.13 h1:4pkQD1f2SQOsGsurGUhb9dquzJzTjVp/znOvGzqG+q4=
-e.globalpand.cn/libs/alarm-sdk v0.0.13/go.mod h1:hRPTJ3oNjYuDPpx7Gm9OI+EMnrTFlDpEPCsjSRKDpoc=
+e.globalpand.cn/libs/alarm-sdk v0.0.16 h1:q/W0GkE4LlX8ZXb7yRdrqWfcDsyiRUMt2bj+/DS+c84=
+e.globalpand.cn/libs/alarm-sdk v0.0.16/go.mod h1:bQG5aIt2wY/9AC000R2ILqT/tKYcVSR22f4D4eNKl7A=
 filippo.io/edwards25519 v1.1.0 h1:FNf4tywRC1HmFuKW5xopWpigGjJKiJSV0Cqo0cJWDaA=
 filippo.io/edwards25519 v1.1.0/go.mod h1:BxyFTGdWcka3PhytdK4V28tE5sGfRvvvRV7EaN4VDT4=
 github.com/BurntSushi/toml v1.5.0 h1:W5quZX/G/csjUnuI8SUYlsHs9M38FC7znL0lIO+DvMg=

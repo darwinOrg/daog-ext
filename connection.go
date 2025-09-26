@@ -67,4 +67,6 @@ func InitDb(cfg *DbCfg, enableAlarm bool) {
 			log.Printf("init db error: %v", err)
 		}
 	}
+
+	validateTableMeta()
 }
