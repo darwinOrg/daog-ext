@@ -68,5 +68,5 @@ func InitDb(cfg *DbCfg, enableAlarm bool) {
 		}
 	}
 
-	validateTableMeta()
+	go validateTableMeta()
 }
