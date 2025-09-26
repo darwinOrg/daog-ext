@@ -67,6 +67,9 @@ func isMySQLTypeCompatibleWithGo(mysqlType, goTypeName string) bool {
 		"ttypes.NilableDate": {
 			"datetime", "timestamp", "date", "time", "year",
 		},
+		"ttypes.NormalDate": {
+			"datetime", "timestamp", "date", "time", "year",
+		},
 		"ttypes.NilableDatetime": {
 			"datetime", "timestamp", "date", "time", "year",
 		},
