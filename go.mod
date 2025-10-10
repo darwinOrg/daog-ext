@@ -3,8 +3,8 @@ module github.com/darwinOrg/daog-ext
 go 1.23.1
 
 require (
-	e.globalpand.cn/libs/alarm-sdk v0.0.16
-	github.com/darwinOrg/go-common v0.2.16
+	e.globalpand.cn/libs/alarm-sdk v0.0.17
+	github.com/darwinOrg/go-common v0.2.18
 	github.com/darwinOrg/go-logger v0.0.15
 	github.com/go-sql-driver/mysql v1.9.3
 	github.com/rolandhe/daog v0.0.41

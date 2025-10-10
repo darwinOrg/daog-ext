@@ -84,6 +84,17 @@ func validateTableMeta() {
 		return
 	}
 
+	existsTableNames := dgcoll.MapToSet(columnInfos, func(info *columnInfo) string { return info.TableName })
+	notExistsTableNames := dgcoll.Remove(tablesNames, existsTableNames)
+	if len(notExistsTableNames) > 0 {
+		alarmContent := fmt.Sprintf("数据库缺少表: %s", strings.Join(notExistsTableNames, ", "))
+		if enableErrorAlarm {
+			alarmsdk.BackendAlarm(ctx, alarmContent)
+		} else {
+			dglogger.Warn(ctx, alarmContent)
+		}
+	}
+
 	tableName2ColumnInfosMap := dgcoll.GroupBy(columnInfos, func(info *columnInfo) string { return info.TableName })
 	for tableName, tableColumnInfos := range tableName2ColumnInfosMap {
 		metaExt := tableMetaExtMap[tableName]
