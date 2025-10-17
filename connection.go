@@ -3,14 +3,17 @@ package daogext
 import (
 	"log"
 
+	dgctx "github.com/darwinOrg/go-common/context"
 	dgsys "github.com/darwinOrg/go-common/sys"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/rolandhe/daog"
 )
 
+type DbErrorProcessor func(ctx *dgctx.DgContext, err error)
+
 var (
-	dataSource       daog.Datasource
-	enableErrorAlarm bool
+	dataSource     daog.Datasource
+	errorProcessor DbErrorProcessor
 )
 
 func SetDatasource(ds daog.Datasource) {
@@ -37,8 +40,8 @@ type DbCfg struct {
 	NotLogSQL bool `json:"not-log-sql" mapstructure:"not-log-sql"`
 }
 
-func InitDbWithPossessionCallback(cfg *DbCfg, enableAlarm bool) {
-	InitDb(cfg, enableAlarm)
+func InitDbWithPossessionCallback(cfg *DbCfg, dbErrorProcessor DbErrorProcessor) {
+	InitDb(cfg, dbErrorProcessor)
 
 	daog.ChangeFieldOfInsBeforeWrite = func(valueMap map[string]any, extractor daog.FieldPointExtractor) error {
 		return daog.ChangeInt64ByFieldNameCallback(valueMap, "op_id", extractor)
@@ -48,8 +51,7 @@ func InitDbWithPossessionCallback(cfg *DbCfg, enableAlarm bool) {
 	}
 }
 
-func InitDb(cfg *DbCfg, enableAlarm bool) {
-	enableErrorAlarm = enableAlarm
+func InitDb(cfg *DbCfg, dbErrorProcessor DbErrorProcessor) {
 	dbConf := &daog.DbConf{
 		DbUrl:    cfg.Url,
 		Size:     cfg.MaxOpenConns,
@@ -67,6 +69,7 @@ func InitDb(cfg *DbCfg, enableAlarm bool) {
 			log.Printf("init db error: %v", err)
 		}
 	}
+	errorProcessor = dbErrorProcessor
 
 	go validateTableMeta()
 }
