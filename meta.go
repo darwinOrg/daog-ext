@@ -86,7 +86,7 @@ func validateTableMeta() {
 	existsTableNames := dgcoll.MapToSet(columnInfos, func(info *columnInfo) string { return info.TableName })
 	notExistsTableNames := dgcoll.Remove(tablesNames, existsTableNames)
 	if len(notExistsTableNames) > 0 {
-		dbe := fmt.Errorf("数据库缺少表: %s", strings.Join(notExistsTableNames, ", "))
+		dbe := fmt.Errorf("错误！数据库缺少表: %s", strings.Join(notExistsTableNames, ", "))
 		if errorProcessor != nil {
 			errorProcessor(ctx, dbe)
 		} else {
@@ -103,7 +103,7 @@ func validateTableMeta() {
 
 			// 如果实际数据库里面没有这个字段，则报警
 			if tableColumnInfo == nil {
-				dbe := fmt.Errorf("[%s.%s]字段缺失", tableName, metaColumn)
+				dbe := fmt.Errorf("错误！[%s.%s]字段缺失", tableName, metaColumn)
 				if errorProcessor != nil {
 					errorProcessor(ctx, dbe)
 				} else {
@@ -117,7 +117,7 @@ func validateTableMeta() {
 
 			// 如果mysql与go的数据类型不匹配，则报警
 			if !isMySQLTypeCompatibleWithGo(dbColumnType, metaColumnType) {
-				dbe := fmt.Errorf("[%s.%s]字段类型不匹配: %s / %s", tableName, metaColumn, dbColumnType, metaColumnType)
+				dbe := fmt.Errorf("错误！[%s.%s]字段类型不匹配: %s / %s", tableName, metaColumn, dbColumnType, metaColumnType)
 				if errorProcessor != nil {
 					errorProcessor(ctx, dbe)
 				} else {
