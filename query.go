@@ -44,3 +44,21 @@ func QueryRawListByTc[T any](ctx *dgctx.DgContext, tc *daog.TransContext, sql st
 	}
 	return list, err
 }
+
+func QueryRawOne[T any](ctx *dgctx.DgContext, sql string, args ...any) (*T, error) {
+	return ReadonlyWithResult(ctx, func(tc *daog.TransContext) (*T, error) {
+		return QueryRawOneByTc[T](ctx, tc, sql, args...)
+	})
+}
+
+func QueryRawOneByTc[T any](ctx *dgctx.DgContext, tc *daog.TransContext, sql string, args ...any) (*T, error) {
+	list, err := QueryRawListByTc[T](ctx, tc, sql, args...)
+	if err != nil {
+		return nil, err
+	}
+	if len(list) == 0 {
+		return nil, nil
+	}
+
+	return list[0], err
+}
