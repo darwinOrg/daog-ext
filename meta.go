@@ -99,7 +99,9 @@ func validateTableMeta() {
 		metaExt := tableMetaExtMap[tableName]
 		metaColumns := metaExt.Columns
 		for i, metaColumn := range metaColumns {
-			tableColumnInfo := dgcoll.FindFirst(tableColumnInfos, func(info *columnInfo) bool { return info.ColumnName == metaColumn }, nil)
+			tableColumnInfo := dgcoll.FindFirst(tableColumnInfos, func(info *columnInfo) bool {
+				return strings.ReplaceAll(info.ColumnName, "`", "") == strings.ReplaceAll(metaColumn, "`", "")
+			}, nil)
 
 			// 如果实际数据库里面没有这个字段，则报警
 			if tableColumnInfo == nil {
