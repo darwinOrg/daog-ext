@@ -10,6 +10,7 @@ import (
 
 func init() {
 	daog.GLogger = &daogLogger{}
+	dglogger.AppendIgnoreCallerFlags("daog(-ext)?(@[\\w.]+)?/([\\w.]+)?.go$")
 }
 
 type daogLogger struct {
