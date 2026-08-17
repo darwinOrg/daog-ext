@@ -1,6 +1,17 @@
 package daogext
 
-import "strings"
+import (
+	"strings"
+
+	"github.com/rolandhe/daog/ttypes"
+)
+
+func ToNilableString(value string) ttypes.NilableString {
+	if value == "" {
+		return *ttypes.GetNilString()
+	}
+	return *ttypes.FromString(value)
+}
 
 // isMySQLTypeCompatibleWithGo 判断 MySQL 数据类型是否可映射到指定的 Go 类型
 func isMySQLTypeCompatibleWithGo(mysqlType, goTypeName string) bool {
