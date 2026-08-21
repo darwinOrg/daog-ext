@@ -31,7 +31,7 @@ func (dl *daogLogger) ExecSQLBefore(ctx context.Context, sql string, argsJson []
 }
 
 func (dl *daogLogger) ExecSQLAfter(ctx context.Context, sqlMd5 string, cost int64) {
-	if cost < CostThresholdMilli {
+	if cost > CostThresholdMilli {
 		dglogger.Infof(getDgContext(ctx), "%s | %dms", sqlMd5, cost)
 	}
 }
