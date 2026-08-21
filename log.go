@@ -8,6 +8,8 @@ import (
 	"github.com/rolandhe/daog"
 )
 
+var CostThresholdMilli int64 = 500
+
 func init() {
 	daog.GLogger = &daogLogger{}
 	dglogger.AppendIgnoreCallerFlags("daog(-ext)?(@[\\w.]+)?/([\\w.]+)?.go$")
@@ -21,15 +23,17 @@ func (dl *daogLogger) Error(ctx context.Context, err error) {
 }
 
 func (dl *daogLogger) Info(ctx context.Context, content string) {
-	dglogger.Infof(getDgContext(ctx), "[daog] content: %s", content)
+	//dglogger.Infof(getDgContext(ctx), "content: %s", content)
 }
 
 func (dl *daogLogger) ExecSQLBefore(ctx context.Context, sql string, argsJson []byte, sqlMd5 string) {
-	dglogger.Infof(getDgContext(ctx), "[daog] [Trace SQL] sqlMd5=%s, sql: %s, args:%s", sqlMd5, sql, argsJson)
+	dglogger.Infof(getDgContext(ctx), "%s | %s | %s", sqlMd5, sql, argsJson)
 }
 
 func (dl *daogLogger) ExecSQLAfter(ctx context.Context, sqlMd5 string, cost int64) {
-	dglogger.Infof(getDgContext(ctx), "[daog] [Trace SQL] sqlMd5=%s, cost %d ms", sqlMd5, cost)
+	if cost < CostThresholdMilli {
+		dglogger.Infof(getDgContext(ctx), "%s | %dms", sqlMd5, cost)
+	}
 }
 
 func (dl *daogLogger) SimpleLogError(err error) {
