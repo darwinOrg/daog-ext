@@ -55,6 +55,7 @@ func initSqlContent() {
 	ctx := dgctx.SimpleDgContext()
 
 	scList, err := ReadonlyWithResult(ctx, func(tc *daog.TransContext) ([]*SqlContent, error) {
+		tc.LogSQL = false
 		return SqlContentExtDao.FindByCategory(ctx, tc, dgsys.ServiceName)
 	})
 	if err != nil {
