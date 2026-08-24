@@ -34,9 +34,15 @@ func (dl *daogLogger) ExecSQLBefore(ctx context.Context, sql string, argsJson []
 	}
 	dc := getDgContext(ctx)
 	if sqlId := syncSqlContent(dc, sqlMd5, sql); sqlId > 0 {
-		dglogger.Infof(dc, "%d | %s", sqlId, argsJson)
-	} else {
+		if len(argsJson) > 0 {
+			dglogger.Infof(dc, "%d | %s", sqlId, argsJson)
+		} else {
+			dglogger.Infof(dc, "%d", sqlId)
+		}
+	} else if len(argsJson) > 0 {
 		dglogger.Infof(dc, "%s | %s", sqlMd5, argsJson)
+	} else {
+		dglogger.Infof(dc, "%s", sqlMd5)
 	}
 }
 
