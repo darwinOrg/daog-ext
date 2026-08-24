@@ -5,6 +5,7 @@ import (
 	"context"
 
 	"github.com/darwinOrg/go-common/context"
+	"github.com/darwinOrg/go-common/utils"
 	"github.com/darwinOrg/go-logger"
 	"github.com/rolandhe/daog"
 )
@@ -26,7 +27,8 @@ func (dl *daogLogger) Error(ctx context.Context, err error) {
 func (dl *daogLogger) Info(ctx context.Context, content string) {
 }
 
-func (dl *daogLogger) ExecSQLBefore(ctx context.Context, sql string, argsJson []byte, sqlMd5 string) {
+func (dl *daogLogger) ExecSQLBefore(ctx context.Context, sql string, argsJson []byte, _ string) {
+	sqlMd5 := utils.Md5Hex(sql)
 	if len(argsJson) > 0 {
 		argsJson = bytes.TrimSuffix(bytes.TrimPrefix(argsJson, []byte("[")), []byte("]"))
 	}
