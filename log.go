@@ -27,7 +27,7 @@ func (dl *daogLogger) Info(ctx context.Context, content string) {
 
 func (dl *daogLogger) ExecSQLBefore(ctx context.Context, sql string, argsJson []byte, sqlMd5 string) {
 	dc := getDgContext(ctx)
-	if sqlId, err := syncSqlContent(dc, sqlMd5, sql); err == nil {
+	if sqlId := syncSqlContent(dc, sqlMd5, sql); sqlId > 0 {
 		dglogger.Infof(dc, "%d | %s", sqlId, argsJson)
 	} else {
 		dglogger.Infof(dc, "%s | %s", sqlMd5, argsJson)

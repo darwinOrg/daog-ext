@@ -15,34 +15,31 @@ var SqlContentExtDao = &sqlContentExtDao{}
 
 type sqlContentExtDao struct{}
 
-func (d *sqlContentExtDao) FindByCategory(ctx *dgctx.DgContext, tc *daog.TransContext, category string) ([]*SqlContent, error) {
+func (d *sqlContentExtDao) FindByCategory(tc *daog.TransContext, category string) ([]*SqlContent, error) {
 	list, err := SqlContentDao.QueryListMatcherWithViewColumns(tc, daog.NewMatcher().Eq(SqlContentFields.Category, category),
 		[]string{SqlContentFields.Id, SqlContentFields.SqlMd5})
 	if err != nil {
-		dglogger.Errorf(ctx, "SqlContentDao.GetById error: %v", err)
 		return nil, err
 	}
 
 	return list, nil
 }
 
-func (d *sqlContentExtDao) GetByCategoryAndSqlMd5(ctx *dgctx.DgContext, tc *daog.TransContext, category, sqlMd5 string) (*SqlContent, error) {
+func (d *sqlContentExtDao) GetByCategoryAndSqlMd5(tc *daog.TransContext, category, sqlMd5 string) (*SqlContent, error) {
 	sc, err := SqlContentDao.QueryOneMatcher(tc, daog.NewMatcher().Eq(SqlContentFields.Category, category).Eq(SqlContentFields.SqlMd5, sqlMd5))
 	if err != nil {
-		dglogger.Errorf(ctx, "SqlContentDao.QueryOneMatcher error: %v", err)
 		return nil, err
 	}
 
 	return sc, nil
 }
 
-func (d *sqlContentExtDao) Create(ctx *dgctx.DgContext, tc *daog.TransContext, sc *SqlContent) error {
+func (d *sqlContentExtDao) Create(tc *daog.TransContext, sc *SqlContent) error {
 	now := ttypes.NormalDatetime(time.Now())
 	sc.CreatedAt = now
 
 	_, err := SqlContentDao.Insert(tc, sc)
 	if err != nil {
-		dglogger.Errorf(ctx, "SqlContentDao.Insert error: %v", err)
 		return err
 	}
 
@@ -56,7 +53,7 @@ func initSqlContent() {
 
 	scList, err := ReadonlyWithResult(ctx, func(tc *daog.TransContext) ([]*SqlContent, error) {
 		tc.LogSQL = false
-		return SqlContentExtDao.FindByCategory(ctx, tc, dgsys.ServiceName)
+		return SqlContentExtDao.FindByCategory(tc, dgsys.ServiceName)
 	})
 	if err != nil {
 		dglogger.Warnf(ctx, "SqlContentExtDao.FindByCategory err: %v", err)
@@ -71,14 +68,14 @@ func initSqlContent() {
 	}
 }
 
-func syncSqlContent(ctx *dgctx.DgContext, sqlMd5, content string) (int64, error) {
+func syncSqlContent(ctx *dgctx.DgContext, sqlMd5, content string) int64 {
 	if sqlId, ok := sqlContentMap.Load(sqlMd5); ok {
-		return sqlId.(int64), nil
+		return sqlId.(int64)
 	}
 
-	return WriteWithResult(ctx, func(tc *daog.TransContext) (int64, error) {
+	sqlId, _ := WriteWithResult(ctx, func(tc *daog.TransContext) (int64, error) {
 		tc.LogSQL = false
-		sc, err := SqlContentExtDao.GetByCategoryAndSqlMd5(ctx, tc, dgsys.ServiceName, sqlMd5)
+		sc, err := SqlContentExtDao.GetByCategoryAndSqlMd5(tc, dgsys.ServiceName, sqlMd5)
 		if err != nil {
 			return 0, err
 		}
@@ -92,7 +89,7 @@ func syncSqlContent(ctx *dgctx.DgContext, sqlMd5, content string) (int64, error)
 			SqlMd5:   sqlMd5,
 			Content:  content,
 		}
-		err = SqlContentExtDao.Create(ctx, tc, sc)
+		err = SqlContentExtDao.Create(tc, sc)
 		if err != nil {
 			return 0, err
 		}
@@ -100,4 +97,5 @@ func syncSqlContent(ctx *dgctx.DgContext, sqlMd5, content string) (int64, error)
 		sqlContentMap.Store(sc.SqlMd5, sc.Id)
 		return sc.Id, nil
 	})
+	return sqlId
 }
