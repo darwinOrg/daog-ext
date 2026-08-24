@@ -76,6 +76,7 @@ func syncSqlContent(ctx *dgctx.DgContext, sqlMd5, content string) (int64, error)
 	}
 
 	return WriteWithResult(ctx, func(tc *daog.TransContext) (int64, error) {
+		tc.LogSQL = false
 		sc, err := SqlContentExtDao.GetByCategoryAndSqlMd5(ctx, tc, dgsys.ServiceName, sqlMd5)
 		if err != nil {
 			return 0, err
