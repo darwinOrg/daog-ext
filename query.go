@@ -1,10 +1,9 @@
 package daogext
 
 import (
-	dgctx "github.com/darwinOrg/go-common/context"
-	dgerr "github.com/darwinOrg/go-common/enums/error"
+	"github.com/darwinOrg/go-common/context"
 	"github.com/darwinOrg/go-common/utils"
-	dglogger "github.com/darwinOrg/go-logger"
+	"github.com/darwinOrg/go-logger"
 	"github.com/rolandhe/daog"
 )
 
@@ -20,7 +19,7 @@ func CountRawByTc(ctx *dgctx.DgContext, tc *daog.TransContext, sql string, args 
 	}, sql, args...)
 	if err != nil {
 		dglogger.Errorf(ctx, "daog.QueryRawSQL error: %v", err)
-		return 0, dgerr.SYSTEM_ERROR
+		return 0, err
 	}
 	if len(scs) == 0 {
 		return 0, nil

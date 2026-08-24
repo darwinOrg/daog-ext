@@ -5,17 +5,17 @@ import (
 	"reflect"
 	"strings"
 
-	dgcoll "github.com/darwinOrg/go-common/collection"
-	dgctx "github.com/darwinOrg/go-common/context"
-	dgsys "github.com/darwinOrg/go-common/sys"
-	dglogger "github.com/darwinOrg/go-logger"
+	"github.com/darwinOrg/go-common/collection"
+	"github.com/darwinOrg/go-common/context"
+	"github.com/darwinOrg/go-common/sys"
+	"github.com/darwinOrg/go-logger"
 	"github.com/rolandhe/daog"
 )
 
 type columnInfo struct {
 	TableName  string
 	ColumnName string
-	ColumnType string // 如: int(11) unsigned
+	ColumnType string
 }
 
 type tableMetaExt struct {
@@ -98,6 +98,9 @@ func validateTableMeta() {
 	for tableName, tableColumnInfos := range tableName2ColumnInfosMap {
 		metaExt := tableMetaExtMap[tableName]
 		metaColumns := metaExt.Columns
+		var missColumns []string
+		var disMatchColumns []string
+
 		for i, metaColumn := range metaColumns {
 			tableColumnInfo := dgcoll.FindFirst(tableColumnInfos, func(info *columnInfo) bool {
 				return strings.ReplaceAll(info.ColumnName, "`", "") == strings.ReplaceAll(metaColumn, "`", "")
@@ -105,12 +108,7 @@ func validateTableMeta() {
 
 			// 如果实际数据库里面没有这个字段，则报警
 			if tableColumnInfo == nil {
-				dbe := fmt.Errorf("错误！[%s.%s]字段缺失", tableName, metaColumn)
-				if errorProcessor != nil {
-					errorProcessor(ctx, dbe)
-				} else {
-					dglogger.Warn(ctx, dbe)
-				}
+				missColumns = append(missColumns, metaColumn)
 				continue
 			}
 
@@ -119,13 +117,26 @@ func validateTableMeta() {
 
 			// 如果mysql与go的数据类型不匹配，则报警
 			if !isMySQLTypeCompatibleWithGo(dbColumnType, metaColumnType) {
-				dbe := fmt.Errorf("错误！[%s.%s]字段类型不匹配: %s / %s", tableName, metaColumn, dbColumnType, metaColumnType)
-				if errorProcessor != nil {
-					errorProcessor(ctx, dbe)
-				} else {
-					dglogger.Warn(ctx, dbe)
-				}
+				disMatchColumns = append(disMatchColumns, metaColumn)
 				continue
+			}
+		}
+
+		if len(missColumns) > 0 {
+			dbe := fmt.Errorf("错误！[%s - %s]字段缺失", tableName, strings.Join(missColumns, ", "))
+			if errorProcessor != nil {
+				errorProcessor(ctx, dbe)
+			} else {
+				dglogger.Warn(ctx, dbe)
+			}
+		}
+
+		if len(disMatchColumns) > 0 {
+			dbe := fmt.Errorf("错误！[%s - %s]字段类型不匹配", tableName, strings.Join(disMatchColumns, ", "))
+			if errorProcessor != nil {
+				errorProcessor(ctx, dbe)
+			} else {
+				dglogger.Warn(ctx, dbe)
 			}
 		}
 	}

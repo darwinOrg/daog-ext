@@ -3,8 +3,8 @@ package daogext
 import (
 	"context"
 
-	dgctx "github.com/darwinOrg/go-common/context"
-	dglogger "github.com/darwinOrg/go-logger"
+	"github.com/darwinOrg/go-common/context"
+	"github.com/darwinOrg/go-logger"
 	"github.com/rolandhe/daog"
 )
 
@@ -23,11 +23,15 @@ func (dl *daogLogger) Error(ctx context.Context, err error) {
 }
 
 func (dl *daogLogger) Info(ctx context.Context, content string) {
-	//dglogger.Infof(getDgContext(ctx), "content: %s", content)
 }
 
 func (dl *daogLogger) ExecSQLBefore(ctx context.Context, sql string, argsJson []byte, sqlMd5 string) {
-	dglogger.Infof(getDgContext(ctx), "%s | %s", sql, argsJson)
+	dc := getDgContext(ctx)
+	if sqlId, err := syncSqlContent(dc, sqlMd5, sql); err == nil {
+		dglogger.Infof(dc, "%d | %s", sqlId, argsJson)
+	} else {
+		dglogger.Infof(dc, "%s | %s", sqlMd5, argsJson)
+	}
 }
 
 func (dl *daogLogger) ExecSQLAfter(ctx context.Context, sqlMd5 string, cost int64) {

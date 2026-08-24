@@ -3,8 +3,8 @@ package daogext
 import (
 	"log"
 
-	dgctx "github.com/darwinOrg/go-common/context"
-	dgsys "github.com/darwinOrg/go-common/sys"
+	"github.com/darwinOrg/go-common/context"
+	"github.com/darwinOrg/go-common/sys"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/rolandhe/daog"
 )
@@ -65,11 +65,13 @@ func InitDb(cfg *DbCfg, dbErrorProcessor DbErrorProcessor) {
 	if err != nil {
 		if dgsys.IsFormalProfile() {
 			panic(err)
-		} else {
-			log.Printf("init db error: %v", err)
 		}
+
+		log.Printf("init db error: %v", err)
 	}
 	errorProcessor = dbErrorProcessor
+
+	initSqlContent()
 
 	go validateTableMeta()
 }

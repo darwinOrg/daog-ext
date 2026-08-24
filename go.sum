@@ -4,8 +4,8 @@ github.com/BurntSushi/toml v1.6.0 h1:dRaEfpa2VI55EwlIW72hMRHdWouJeRF7TPYhI+AUQjk
 github.com/BurntSushi/toml v1.6.0/go.mod h1:ukJfTF/6rtPPRCnwkur4qwRxa8vTRFBF0uk2lLoLwho=
 github.com/darwinOrg/go-common v0.2.33 h1:EBq1o1xCInspMa8moGnaS9f2qJ11/C1FABsXrVKN2wU=
 github.com/darwinOrg/go-common v0.2.33/go.mod h1:pItL/4ZV0bU64N2qD9ACpvDlYjeomAbheIzPXKqbb88=
-github.com/darwinOrg/go-logger v0.0.20 h1:Fen+tUyuUbamB2oo9MHbJN2gbxmE+m1X2FFqmuaoo0k=
-github.com/darwinOrg/go-logger v0.0.20/go.mod h1:z4le16kJO1AWSgpczNdnoPfJTH2Ye3EYmn8vQAWq8Bc=
+github.com/darwinOrg/go-logger v0.0.21 h1:Axx96m/8XKyZOxkKF9VMxLzuTBo80Wo30ZmJFsUAV0E=
+github.com/darwinOrg/go-logger v0.0.21/go.mod h1:McBOnTFT6XNMwomtnKcfYaQpbLTZ7qkLQj3KBVCySCY=
 github.com/go-sql-driver/mysql v1.10.0 h1:Q+1LV8DkHJvSYAdR83XzuhDaTykuDx0l6fkXxoWCWfw=
 github.com/go-sql-driver/mysql v1.10.0/go.mod h1:M+cqaI7+xxXGG9swrdeUIoPG3Y3KCkF0pZej+SK+nWk=
 github.com/natefinch/lumberjack v2.0.0+incompatible h1:4QJd3OLAMgj7ph+yZTuX13Ld4UpgHp07nNdFX7mqFfM=

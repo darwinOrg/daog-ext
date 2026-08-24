@@ -1,9 +1,9 @@
 package daogext
 
 import (
-	dgctx "github.com/darwinOrg/go-common/context"
+	"github.com/darwinOrg/go-common/context"
 	"github.com/rolandhe/daog"
-	txrequest "github.com/rolandhe/daog/tx"
+	"github.com/rolandhe/daog/tx"
 )
 
 func Readonly(ctx *dgctx.DgContext, workFn func(tc *daog.TransContext) error) error {

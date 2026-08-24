@@ -11,6 +11,8 @@ var (
 
 	ModifiedAtOrderAsc  = daog.NewOrder("modified_at")
 	ModifiedAtOrderDesc = daog.NewDescOrder("modified_at")
-
-	OnlyOnePaper = &daog.Pager{PageSize: 1, PageNumber: 1}
 )
+
+var OnlyIdColumns = []string{"id"}
+
+var OnlyOnePaper = &daog.Pager{PageSize: 1, PageNumber: 1}
