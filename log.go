@@ -27,7 +27,7 @@ func (dl *daogLogger) Info(ctx context.Context, content string) {
 }
 
 func (dl *daogLogger) ExecSQLBefore(ctx context.Context, sql string, argsJson []byte, sqlMd5 string) {
-	dglogger.Infof(getDgContext(ctx), "%s | %s | %s", sqlMd5, sql, argsJson)
+	dglogger.Infof(getDgContext(ctx), "%s | %s", sql, argsJson)
 }
 
 func (dl *daogLogger) ExecSQLAfter(ctx context.Context, sqlMd5 string, cost int64) {
