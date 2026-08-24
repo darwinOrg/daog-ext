@@ -1,6 +1,7 @@
 package daogext
 
 import (
+	"sync"
 	"time"
 
 	"github.com/darwinOrg/go-common/context"
@@ -48,7 +49,7 @@ func (d *sqlContentExtDao) Create(ctx *dgctx.DgContext, tc *daog.TransContext, s
 	return nil
 }
 
-var sqlContentMap = make(map[string]int64)
+var sqlContentMap = sync.Map{}
 
 func initSqlContent() {
 	ctx := dgctx.SimpleDgContext()
@@ -65,13 +66,13 @@ func initSqlContent() {
 	}
 
 	for _, sc := range scList {
-		sqlContentMap[sc.SqlMd5] = sc.Id
+		sqlContentMap.Store(sc.SqlMd5, sc.Id)
 	}
 }
 
 func syncSqlContent(ctx *dgctx.DgContext, sqlMd5, content string) (int64, error) {
-	if sqlId, ok := sqlContentMap[sqlMd5]; ok {
-		return sqlId, nil
+	if sqlId, ok := sqlContentMap.Load(sqlMd5); ok {
+		return sqlId.(int64), nil
 	}
 
 	return WriteWithResult(ctx, func(tc *daog.TransContext) (int64, error) {
@@ -80,7 +81,7 @@ func syncSqlContent(ctx *dgctx.DgContext, sqlMd5, content string) (int64, error)
 			return 0, err
 		}
 		if sc != nil {
-			sqlContentMap[sqlMd5] = sc.Id
+			sqlContentMap.Store(sc.SqlMd5, sc.Id)
 			return sc.Id, nil
 		}
 
@@ -94,7 +95,7 @@ func syncSqlContent(ctx *dgctx.DgContext, sqlMd5, content string) (int64, error)
 			return 0, err
 		}
 
-		sqlContentMap[sqlMd5] = sc.Id
+		sqlContentMap.Store(sc.SqlMd5, sc.Id)
 		return sc.Id, nil
 	})
 }
