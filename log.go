@@ -3,6 +3,8 @@ package daogext
 import (
 	"bytes"
 	"context"
+	"regexp"
+	"strings"
 
 	"github.com/darwinOrg/go-common/context"
 	"github.com/darwinOrg/go-common/utils"
@@ -11,6 +13,9 @@ import (
 )
 
 var CostThresholdMilli int64 = 500
+
+// 多 ? 占位符严格匹配：括号内是 ? 用逗号分隔，各部分之间允许任意空格
+var multiPlaceholderRe = regexp.MustCompile(`\(\s*\?\s*(?:,\s*\?\s*)*\)`)
 
 func init() {
 	daog.GLogger = &daogLogger{}
@@ -28,6 +33,8 @@ func (dl *daogLogger) Info(ctx context.Context, content string) {
 }
 
 func (dl *daogLogger) ExecSQLBefore(ctx context.Context, sql string, argsJson []byte, _ string) {
+	sql = strings.TrimSpace(sql)
+	sql = multiPlaceholderRe.ReplaceAllString(sql, "(?)")
 	sqlMd5 := utils.Md5Hex(sql)
 	if len(argsJson) > 0 {
 		argsJson = bytes.TrimSuffix(bytes.TrimPrefix(argsJson, []byte("[")), []byte("]"))
