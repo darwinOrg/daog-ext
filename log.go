@@ -14,8 +14,12 @@ import (
 
 var CostThresholdMilli int64 = 500
 
+// 匹配 IN (xxx, yyy, ...) 形式，忽略大小写
+// (?i) 表示忽略大小写，IN 后面允许空格，括号内匹配任意非 ) 字符
+var inRe = regexp.MustCompile(`(?i)\bIN\s*\([^)]+\)`)
+
 // 多 ? 占位符严格匹配：括号内是 ? 用逗号分隔，各部分之间允许任意空格
-var multiPlaceholderRe = regexp.MustCompile(`\(\s*\?\s*(?:,\s*\?\s*)*\)`)
+var markRe = regexp.MustCompile(`\(\s*\?\s*(?:,\s*\?\s*)*\)`)
 
 func init() {
 	daog.GLogger = &daogLogger{}
@@ -34,7 +38,8 @@ func (dl *daogLogger) Info(ctx context.Context, content string) {
 
 func (dl *daogLogger) ExecSQLBefore(ctx context.Context, sql string, argsJson []byte, _ string) {
 	sql = strings.TrimSpace(sql)
-	sql = multiPlaceholderRe.ReplaceAllString(sql, "(?)")
+	sql = inRe.ReplaceAllString(sql, "in (?)")
+	sql = markRe.ReplaceAllString(sql, "(?)")
 	sqlMd5 := utils.Md5Hex(sql)
 	if len(argsJson) > 0 {
 		argsJson = bytes.TrimSuffix(bytes.TrimPrefix(argsJson, []byte("[")), []byte("]"))
