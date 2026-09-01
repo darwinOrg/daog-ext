@@ -37,14 +37,24 @@ func (dl *daogLogger) Info(ctx context.Context, content string) {
 }
 
 func (dl *daogLogger) ExecSQLBefore(ctx context.Context, sql string, argsJson []byte, _ string) {
-	sql = strings.TrimSpace(sql)
-	sql = inRe.ReplaceAllString(sql, "in (?)")
-	sql = markRe.ReplaceAllString(sql, "(?)")
-	sqlMd5 := utils.Md5Hex(sql)
 	if len(argsJson) > 0 {
 		argsJson = bytes.TrimSuffix(bytes.TrimPrefix(argsJson, []byte("[")), []byte("]"))
 	}
+
 	dc := getDgContext(ctx)
+	sql = strings.TrimSpace(sql)
+	if logRawSql {
+		if len(argsJson) > 0 {
+			dglogger.Infof(dc, "%s | %s", sql, argsJson)
+		} else {
+			dglogger.Infof(dc, "%s", sql)
+		}
+		return
+	}
+
+	sql = inRe.ReplaceAllString(sql, "in (?)")
+	sql = markRe.ReplaceAllString(sql, "(?)")
+	sqlMd5 := utils.Md5Hex(sql)
 	if sqlId := syncSqlContent(dc, sqlMd5, sql); sqlId > 0 {
 		if len(argsJson) > 0 {
 			dglogger.Infof(dc, "%d | %s", sqlId, argsJson)

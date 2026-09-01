@@ -14,6 +14,7 @@ type DbErrorProcessor func(ctx *dgctx.DgContext, err error)
 var (
 	dataSource     daog.Datasource
 	errorProcessor DbErrorProcessor
+	logRawSql      bool
 )
 
 func SetDatasource(ds daog.Datasource) {
@@ -38,6 +39,8 @@ type DbCfg struct {
 	MaxIdleTime int `json:"max-idle-time" mapstructure:"max-idle-time"`
 	// 不打印SQL日志
 	NotLogSQL bool `json:"not-log-sql" mapstructure:"not-log-sql"`
+	// 是否打印原始SQL日志
+	LogRawSQL bool `json:"log-raw-sql" mapstructure:"log-raw-sql"`
 }
 
 func InitDbWithPossessionCallback(cfg *DbCfg, dbErrorProcessor DbErrorProcessor) {
@@ -60,6 +63,7 @@ func InitDb(cfg *DbCfg, dbErrorProcessor DbErrorProcessor) {
 		IdleTime: cfg.MaxIdleTime,
 		LogSQL:   !cfg.NotLogSQL,
 	}
+	logRawSql = cfg.LogRawSQL
 	var err error
 	dataSource, err = daog.NewDatasource(dbConf)
 	if err != nil {
