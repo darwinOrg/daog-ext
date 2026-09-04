@@ -75,7 +75,9 @@ func InitDb(cfg *DbCfg, dbErrorProcessor DbErrorProcessor) {
 	}
 	errorProcessor = dbErrorProcessor
 
-	initSqlContent()
+	if !logRawSql {
+		initSqlContent()
+	}
 
 	go validateTableMeta()
 }
