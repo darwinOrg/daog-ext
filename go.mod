@@ -3,9 +3,9 @@ module github.com/darwinOrg/daog-ext
 go 1.24.0
 
 require (
-	github.com/darwinOrg/go-common v0.2.33
+	github.com/darwinOrg/go-common v0.2.36
 	github.com/darwinOrg/go-logger v0.0.24
-	github.com/go-sql-driver/mysql v1.10.0
+	github.com/go-sql-driver/mysql v1.10.1
 	github.com/rolandhe/daog v0.0.41
 )
 

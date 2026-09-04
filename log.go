@@ -101,7 +101,7 @@ func (dl *onlyErrorDaogLogger) SimpleLogError(err error) {
 }
 
 func getDgContext(ctx context.Context) *dgctx.DgContext {
-	return &dgctx.DgContext{TraceId: daog.GetTraceIdFromContext(ctx), GoId: daog.GetGoroutineIdFromContext(ctx)}
+	return &dgctx.DgContext{TraceId: daog.GetTraceIdFromContext(ctx)}
 }
 
 func alarmDatabaseError(ctx *dgctx.DgContext, err error) {
